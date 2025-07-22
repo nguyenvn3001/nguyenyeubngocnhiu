@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nguyên yêu Ngọc 💖</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+      color: white;
+      font-family: 'Arial', sans-serif;
+    }
+    #password-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 10;
+    }
+    #password-screen input {
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+    #password-screen button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      font-size: 18px;
+      background: pink;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    #error {
+      color: red;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    canvas {
+      display: block;
+    }
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<div id="password-screen">
+  <h2 style="color:white">Nhập mật khẩu để vào bất ngờ nha ❤️</h2>
+  <input type="password" id="pw-input" placeholder="Mật khẩu..." />
+  <button onclick="checkPassword()">Vào nào 💗</button>
+  <div id="error"></div>
+</div>
+
+<audio id="bg-music" src="NoiNayCoAnh-SonTungMTP-4772041.mp3" loop autoplay></audio>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"></script>
+<script src="https://threejs.org/examples/fonts/helvetiker_regular.typeface.json"></script>
+<script>
+const pwInput = document.getElementById("pw-input");
+function checkPassword() {
+  if (pwInput.value.trim() === "ngocyeu") {
+    document.getElementById("password-screen").style.display = "none";
+    initScene();
+    document.getElementById("bg-music").play();
+  } else {
+    document.getElementById("error").textContent = "Sai òii, thử lại đi nha 🥲";
+  }
+}
+
+const textList = [
+  "Nguyên yêu Ngọc lắm aaa",
+  "Nguyên chỉ cần Ngọc thoi aaa",
+  "Vợ ơi Nguyên yêu vợ aaa",
+  "Mãi bên nhau vợ nháaa",
+  "Yêu vợ nhiều aaa",
+  "Nguyên nhớ vợ ròiii",
+  "Cảm ơn Ngọc đã đến với cuộc đời Nguyên",
+  "Nguyên sẽ cưới Ngọc ạaa",
+  "💖", "❤️", "💗"
+];
+
+function initScene() {
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({antialias: true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  const loader = new THREE.FontLoader();
+  loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+    const meshes = [];
+
+    for (let i = 0; i < 150; i++) {
+      const message = textList[Math.floor(Math.random() * textList.length)];
+      const geometry = new THREE.TextGeometry(message, {
+        font: font,
+        size: 1,
+        height: 0.1,
+        curveSegments: 12,
+      });
+      const material = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(`hsl(${Math.random() * 30 + 330}, 100%, 75%)`)
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(
+        (Math.random() - 0.5) * 100,
+        (Math.random() - 0.5) * 100,
+        (Math.random() - 0.5) * 100
+      );
+      mesh.rotation.set(
+        Math.random() * Math.PI,
+        Math.random() * Math.PI,
+        Math.random() * Math.PI
+      );
+      scene.add(mesh);
+      meshes.push(mesh);
+    }
+
+    camera.position.z = 20;
+    function animate() {
+      requestAnimationFrame(animate);
+      meshes.forEach(m => {
+        m.rotation.y += 0.001;
+        m.rotation.x += 0.001;
+      });
+      camera.rotation.y += 0.0005;
+      renderer.render(scene, camera);
+    }
+    animate();
+  });
+}
+</script>
+</body>
+</html>
